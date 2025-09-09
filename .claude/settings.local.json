@@ -3,7 +3,9 @@
     "allow": [
       "Bash(curl:*)",
       "Bash(python manage.py:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []
