@@ -2,13 +2,27 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from django.views.generic import TemplateView
+from django.http import HttpResponse
 from django.db import models
+import os
 from .models import Rubro, Marca, Product, Cliente, Quote, QuoteItem
 from .serializers import (
     RubroSerializer, MarcaSerializer, ProductSerializer, ProductUpdateSerializer,
     ClienteSerializer, QuoteSerializer, QuoteCreateSerializer
 )
 from .utils import create_pdf_response
+
+class FrontendView(TemplateView):
+    def get(self, request):
+        # Read and serve the frontend HTML file
+        frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend-demo.html')
+        try:
+            with open(frontend_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            return HttpResponse(content, content_type='text/html')
+        except FileNotFoundError:
+            return HttpResponse('<h1>Frontend no encontrado</h1>', content_type='text/html')
 
 class RubroViewSet(viewsets.ModelViewSet):
     queryset = Rubro.objects.all()
