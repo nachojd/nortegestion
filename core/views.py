@@ -14,15 +14,7 @@ from .serializers import (
 from .utils import create_pdf_response
 
 class FrontendView(TemplateView):
-    def get(self, request):
-        # Read and serve the frontend HTML file
-        frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend-demo.html')
-        try:
-            with open(frontend_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            return HttpResponse(content, content_type='text/html')
-        except FileNotFoundError:
-            return HttpResponse('<h1>Frontend no encontrado</h1>', content_type='text/html')
+    template_name = 'core/index.html'
 
 class RubroViewSet(viewsets.ModelViewSet):
     queryset = Rubro.objects.all()
