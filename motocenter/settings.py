@@ -100,7 +100,7 @@ DATABASES = {
 }
 
 # SQLite fallback for development
-if DEBUG and not os.getenv('USE_POSTGRES'):
+if DEBUG and os.getenv('USE_POSTGRES', 'False').lower() != 'true':
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
