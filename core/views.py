@@ -31,9 +31,11 @@ class MarcaViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.filter(activo=True)
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['rubro', 'marca', 'activo']
-    search_fields = ['codigo', 'nombre']
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['rubro', 'marca', 'activo', 'rubro__nombre', 'marca__nombre']
+    search_fields = ['codigo', 'nombre', 'rubro__nombre', 'marca__nombre']
+    ordering_fields = ['codigo', 'nombre', 'precio_venta', 'stock_actual']
+    ordering = ['codigo']
     
     def get_serializer_class(self):
         if self.action in ['update', 'partial_update']:

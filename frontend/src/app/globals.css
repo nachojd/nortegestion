@@ -91,3 +91,33 @@ body {
 .hover\:glow-orange:hover {
   box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
 }
+
+/* Darker placeholders for better readability */
+input::placeholder {
+  color: #4a5568 !important; /* text-gray-700 equivalent */
+  opacity: 1;
+}
+
+input::-webkit-input-placeholder {
+  color: #4a5568 !important;
+  opacity: 1;
+}
+
+input::-moz-placeholder {
+  color: #4a5568 !important;
+  opacity: 1;
+}
+
+/* Ensure input text stays dark when typing */
+input[type="text"] {
+  color: #1a202c !important; /* text-gray-900 equivalent */
+}
+
+input[type="text"]:focus {
+  color: #1a202c !important;
+}
+
+/* Override any Tailwind that might be making it light */
+.text-input-dark {
+  color: #1a202c !important;
+}

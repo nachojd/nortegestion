@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import QueryProvider from "@/components/QueryProvider";
 
 export const metadata: Metadata = {
   title: "MotoCenter - Gestión de Presupuestos",
@@ -27,9 +28,11 @@ export default function RootLayout({
             </div>
           </div>
         </nav>
-        <main className="max-w-7xl mx-auto py-6 sm:py-8 px-4 transition-all duration-300">
-          {children}
-        </main>
+        <QueryProvider>
+          <main className="max-w-7xl mx-auto py-6 sm:py-8 px-4 transition-all duration-300">
+            {children}
+          </main>
+        </QueryProvider>
       </body>
     </html>
   );
