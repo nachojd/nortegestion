@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  web-stable:
+    build: .
+    command: gunicorn --bind 0.0.0.0:8000 --workers 3 motocenter.wsgi:application
+    volumes:
+      - static_volume_stable:/app/staticfiles
+    ports:
+      - "0.0.0.0:8080:8000"  # Puerto diferente para no conflictuar
+    env_file: .env.stable
+    depends_on:
+      - db-stable
+    restart: unless-stopped
+    container_name: motocenter-web-stable
+    
+  db-stable:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data_stable:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: motocenter_stable
+      POSTGRES_USER: motocenter
+      POSTGRES_PASSWORD: motocenter_stable
+    ports:
+      - "0.0.0.0:5433:5432"  # Puerto diferente para acceso externo si es necesario
+    restart: unless-stopped
+    container_name: motocenter-db-stable
+    
+  frontend-stable:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - static_frontend_stable:/app/.next/static
+    ports:
+      - "0.0.0.0:3080:3000"  # Puerto diferente
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://192.168.1.18:8080
+    depends_on:
+      - web-stable
+    restart: unless-stopped
+    container_name: motocenter-frontend-stable
+    
+  nginx-stable:
+    image: nginx:alpine
+    volumes:
+      - ./nginx.stable.conf:/etc/nginx/nginx.conf
+      - static_volume_stable:/static
+      - static_frontend_stable:/frontend-static
+    ports:
+      - "0.0.0.0:8081:80"  # Puerto principal para la netbook
+    depends_on:
+      - web-stable
+      - frontend-stable
+    restart: unless-stopped
+    container_name: motocenter-nginx-stable
+
+volumes:
+  postgres_data_stable:
+  static_volume_stable:
+  static_frontend_stable:
+
+networks:
+  default:
+    name: motocenter-stable-network

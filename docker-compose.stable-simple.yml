@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  web-stable:
+    image: motocenter-dev-web-dev  # Usar imagen ya construida del dev
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "0.0.0.0:8080:8000"
+    env_file: .env.stable
+    depends_on:
+      - db-stable
+    restart: unless-stopped
+    container_name: motocenter-web-stable
+    
+  db-stable:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data_stable:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: motocenter_stable
+      POSTGRES_USER: motocenter
+      POSTGRES_PASSWORD: motocenter_stable
+    ports:
+      - "0.0.0.0:5433:5432"
+    restart: unless-stopped
+    container_name: motocenter-db-stable
+    
+  frontend-stable:
+    image: motocenter-dev-frontend-dev  # Usar imagen ya construida del dev
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "0.0.0.0:3080:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://192.168.1.18:8080
+    depends_on:
+      - web-stable
+    restart: unless-stopped
+    container_name: motocenter-frontend-stable
+
+volumes:
+  postgres_data_stable:
+
+networks:
+  default:
+    name: motocenter-stable-network
