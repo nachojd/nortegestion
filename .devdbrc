@@ -1,0 +1,6 @@
+[
+  {
+    "type": "sqlite",
+    "path": "d:\\Dev\\motocenter\\db.sqlite3"
+  }
+]
