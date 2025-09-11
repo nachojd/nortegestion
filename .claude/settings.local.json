@@ -12,7 +12,14 @@
       "Bash(echo $DEBUG)",
       "Bash(echo $USE_POSTGRES)",
       "Bash(pip install:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(docker-compose:*)",
+      "Bash(docker system prune:*)",
+      "Bash(npm install:*)",
+      "Bash(del \"D:\\Dev\\motocenter\\frontend\\next.config.js\")",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(cmd /c:*)"
     ],
     "deny": [],
     "ask": []

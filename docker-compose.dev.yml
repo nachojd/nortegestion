@@ -14,3 +14,19 @@ services:
       - DEBUG=True
       - SECRET_KEY=django-insecure-development-key
     restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "0.0.0.0:3000:3000"
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    depends_on:
+      - web
