@@ -19,7 +19,17 @@
       "Bash(del \"D:\\Dev\\motocenter\\frontend\\next.config.js\")",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(cmd /c:*)"
+      "Bash(cmd /c:*)",
+      "Bash(docker compose:*)",
+      "Bash(docker container prune:*)",
+      "Bash(ipconfig)",
+      "Bash(docker logs:*)",
+      "Bash(docker exec:*)",
+      "Bash(docker cp:*)",
+      "Bash(git push:*)",
+      "Bash(ping:*)",
+      "Bash(git rm:*)",
+      "Bash(git filter-branch:*)"
     ],
     "deny": [],
     "ask": []
