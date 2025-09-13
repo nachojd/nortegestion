@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MotoCenter - {{ tenant_type|title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        .header {
+            background: #007bff;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .card h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
+        }
+        .api-link {
+            display: block;
+            color: #007bff;
+            text-decoration: none;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .api-link:hover {
+            background: #f8f9fa;
+            padding-left: 0.5rem;
+            transition: all 0.3s;
+        }
+        .api-link:last-child {
+            border-bottom: none;
+        }
+        .tenant-badge {
+            background: #28a745;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .tenant-badge.negocio {
+            background: #ffc107;
+            color: #212529;
+        }
+        .welcome-message {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MotoCenter</h1>
+        <div class="user-info">
+            <span class="tenant-badge {{ tenant_type }}">{{ tenant_type|title }}</span>
+            <span>{{ user.first_name|default:user.username }}</span>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="welcome-message">
+            <h2>Bienvenido al Dashboard de {{ tenant_type|title }}</h2>
+            <p>Sistema de gestión MotoCenter - Sesión independiente</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="products-count">-</div>
+                <div class="stat-label">Productos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="clientes-count">-</div>
+                <div class="stat-label">Clientes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="quotes-count">-</div>
+                <div class="stat-label">Cotizaciones</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="rubros-count">-</div>
+                <div class="stat-label">Rubros</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>APIs Disponibles</h3>
+                <a href="/api/products/" class="api-link" target="_blank">📦 Productos</a>
+                <a href="/api/clientes/" class="api-link" target="_blank">👥 Clientes</a>
+                <a href="/api/quotes/" class="api-link" target="_blank">📋 Cotizaciones</a>
+                <a href="/api/rubros/" class="api-link" target="_blank">🏷️ Rubros</a>
+                <a href="/api/marcas/" class="api-link" target="_blank">🏭 Marcas</a>
+            </div>
+            
+            <div class="card">
+                <h3>Administración</h3>
+                {% if user.is_staff %}
+                <a href="/admin/" class="api-link" target="_blank">⚙️ Panel de Administración</a>
+                {% endif %}
+                <a href="/api/" class="api-link" target="_blank">📡 Información de API</a>
+            </div>
+
+            <div class="card">
+                <h3>Información de Sesión</h3>
+                <p><strong>Usuario:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email|default:"No especificado" }}</p>
+                <p><strong>Tipo de Sesión:</strong> {{ tenant_type|title }}</p>
+                <p><strong>Staff:</strong> {% if user.is_staff %}Sí{% else %}No{% endif %}</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cargar estadísticas desde las APIs
+        async function loadStats() {
+            try {
+                const responses = await Promise.all([
+                    fetch('/api/products/'),
+                    fetch('/api/clientes/'),
+                    fetch('/api/quotes/'),
+                    fetch('/api/rubros/')
+                ]);
+                
+                const [products, clientes, quotes, rubros] = await Promise.all(
+                    responses.map(r => r.json())
+                );
+
+                document.getElementById('products-count').textContent = products.count || products.length || 0;
+                document.getElementById('clientes-count').textContent = clientes.count || clientes.length || 0;
+                document.getElementById('quotes-count').textContent = quotes.count || quotes.length || 0;
+                document.getElementById('rubros-count').textContent = rubros.count || rubros.length || 0;
+            } catch (error) {
+                console.log('Error cargando estadísticas:', error);
+            }
+        }
+
+        // Cargar estadísticas al cargar la página
+        loadStats();
+    </script>
+</body>
+</html>
