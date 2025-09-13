@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script de deployment para Hetzner CX22
 
-echo "🚀 Deploying MotoCenter to Hetzner CX22..."
+echo "🚀 Deploying Norte Gestión to Hetzner CX22..."
 
 # 1. Exportar datos de SQLite
 echo "📦 Exporting SQLite data..."

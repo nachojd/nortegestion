@@ -1,12 +1,13 @@
-# 🏍️ MotoCenter - Sistema de Gestión
+# 🌐 Norte Gestión - Sistema Integral de Gestión
 
-Sistema completo de gestión para talleres de motocicletas con Django REST Framework y Next.js.
+Sistema completo de gestión empresarial multi-sector con Django REST Framework y Next.js.
 
 ## ✨ Características
 
-- 📦 **Gestión de Productos**: Inventario completo con códigos, precios, stock, marcas y rubros
-- 👥 **Clientes**: Base de datos de clientes con información de contacto
+- 📦 **Gestión de Productos**: Inventario completo multi-sector con códigos, precios, stock, marcas y rubros
+- 👥 **Clientes**: Base de datos centralizada de clientes con información de contacto
 - 📋 **Presupuestos**: Sistema completo de cotizaciones con PDF y WhatsApp
+- 🏢 **Multi-Sector**: Adaptable a talleres, ferreterías, repuestos, servicios y más
 - 🎨 **Frontend Moderno**: Interfaz web responsiva con Next.js y Tailwind CSS
 - 📱 **API REST**: API completa para integraciones externas
 - 🔍 **Búsqueda Avanzada**: Filtros y ordenamiento en tiempo real
@@ -47,10 +48,10 @@ python start_dev.py
 ## 📊 Estructura del Proyecto
 
 ```
-motocenter/
+norte-gestion/
 ├── 🐍 Backend Django
 │   ├── core/           # Modelos principales y API
-│   ├── motocenter/     # Configuración Django
+│   ├── motocenter/     # Configuración Django (legacy name)
 │   ├── manage.py       # Django CLI
 │   └── db.sqlite3      # Base de datos
 ├── ⚡ Frontend Next.js
@@ -129,4 +130,4 @@ El sistema incluye:
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
 
 ---
-**MotoCenter** - Sistema de gestión profesional para talleres de motocicletas 🏍️
+**Norte Gestión** - Sistema de gestión empresarial integral para todos los sectores 🌐

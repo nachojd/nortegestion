@@ -42,10 +42,10 @@ def export_data():
     data.extend(serializers.serialize('json', clientes))
     
     # Guardar en archivo
-    with open('motocenter_data.json', 'w', encoding='utf-8') as f:
+    with open('norte_gestion_data.json', 'w', encoding='utf-8') as f:
         f.write('[' + ','.join(data) + ']')
     
-    print("✅ Datos exportados a motocenter_data.json")
+    print("✅ Datos exportados a norte_gestion_data.json")
     print(f"📊 Total de registros: {len(marcas) + len(rubros) + len(productos) + len(clientes)}")
 
 def import_data():
@@ -53,17 +53,17 @@ def import_data():
     print("🔄 Importando datos a PostgreSQL...")
     
     try:
-        with open('motocenter_data.json', 'r', encoding='utf-8') as f:
+        with open('norte_gestion_data.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
         
         print(f"📊 Importando {len(data)} registros...")
         
         # Usar Django's loaddata
-        execute_from_command_line(['manage.py', 'loaddata', 'motocenter_data.json'])
+        execute_from_command_line(['manage.py', 'loaddata', 'norte_gestion_data.json'])
         print("✅ Datos importados exitosamente")
         
     except FileNotFoundError:
-        print("❌ Archivo motocenter_data.json no encontrado")
+        print("❌ Archivo norte_gestion_data.json no encontrado")
         print("💡 Ejecuta primero: python migrate_sqlite_to_postgres.py export")
 
 if __name__ == "__main__":

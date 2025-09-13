@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 import QueryProvider from "@/components/QueryProvider";
 
 export const metadata: Metadata = {
-  title: "MotoCenter - Gestión de Presupuestos",
-  description: "Sistema de gestión para MotoCenter",
+  title: "Norte Gestión - Sistema Integral de Gestión",
+  description: "Sistema de gestión empresarial multi-sector",
 };
 
 export default function RootLayout({
@@ -19,11 +20,11 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex justify-between h-16">
               <div className="flex items-center">
-                <h1 className="text-lg sm:text-xl font-bold text-blue-700">🏍️ <span className="hidden sm:inline">MotoCenter</span></h1>
+                <h1 className="text-lg sm:text-xl font-bold text-blue-700">🌐 <span className="hidden sm:inline">Norte Gestión</span></h1>
               </div>
               <div className="flex items-center space-x-1 sm:space-x-4">
-                <a href="/" className="text-gray-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">🏠 <span className="hidden sm:inline">Inicio</span></a>
-                <a href="/products" className="text-gray-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">📦 <span className="hidden sm:inline">Productos</span></a>
+                <Link href="/" className="text-gray-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">🏠 <span className="hidden sm:inline">Inicio</span></Link>
+                <Link href="/products" className="text-gray-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">📦 <span className="hidden sm:inline">Productos</span></Link>
               </div>
             </div>
           </div>
