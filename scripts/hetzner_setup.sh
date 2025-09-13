@@ -24,9 +24,9 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 # Create application directory
 echo "📁 Setting up application directory..."
-sudo mkdir -p /opt/norte-gestion
-sudo chown $USER:$USER /opt/norte-gestion
-cd /opt/norte-gestion
+sudo mkdir -p /opt/nortegestion
+sudo chown $USER:$USER /opt/nortegestion
+cd /opt/nortegestion
 
 # Basic firewall setup
 echo "🔒 Configuring basic firewall..."
@@ -92,7 +92,7 @@ echo ""
 echo "✅ Hetzner server setup completed!"
 echo ""
 echo "📝 Next steps:"
-echo "   1. Upload your Norte Gestión project to /opt/norte-gestion/"
+echo "   1. Upload your Norte Gestión project to /opt/nortegestion/"
 echo "   2. Copy .env.hetzner to .env"
 echo "   3. Update SECRET_KEY and passwords in .env"
 echo "   4. Run: docker-compose -f docker-compose.hetzner.yml --env-file .env up -d"

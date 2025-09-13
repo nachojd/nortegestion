@@ -29,21 +29,21 @@ Or manually copy and run `scripts/hetzner_setup.sh`
 
 ### 1. Upload Project Files
 
-Upload your project to `/opt/norte-gestion/`:
+Upload your project to `/opt/nortegestion/`:
 
 ```bash
 # Option A: Using git (recommended)
-cd /opt/norte-gestion
-git clone https://github.com/your-repo/norte-gestion.git .
+cd /opt/nortegestion
+git clone https://github.com/your-repo/nortegestion.git .
 
 # Option B: Using rsync/scp
-rsync -avz --exclude-from='.gitignore' ./ root@5.161.102.34:/opt/norte-gestion/
+rsync -avz --exclude-from='.gitignore' ./ root@5.161.102.34:/opt/nortegestion/
 ```
 
 ### 2. Configure Environment
 
 ```bash
-cd /opt/norte-gestion
+cd /opt/nortegestion
 cp .env.hetzner .env
 
 # Edit the .env file with your production values
