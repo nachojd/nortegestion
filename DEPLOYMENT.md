@@ -18,7 +18,7 @@ ssh root@5.161.102.34
 
 2. **Run server setup script:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/your-repo/norte-gestion/main/scripts/hetzner_setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nachojd/nortegestion/main/scripts/hetzner_setup.sh | bash
 ```
 
 Or manually copy and run `scripts/hetzner_setup.sh`
@@ -34,7 +34,7 @@ Upload your project to `/opt/nortegestion/`:
 ```bash
 # Option A: Using git (recommended)
 cd /opt/nortegestion
-git clone https://github.com/your-repo/nortegestion.git .
+git clone https://github.com/nachojd/nortegestion.git .
 
 # Option B: Using rsync/scp
 rsync -avz --exclude-from='.gitignore' ./ root@5.161.102.34:/opt/nortegestion/

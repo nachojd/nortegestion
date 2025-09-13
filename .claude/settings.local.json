@@ -36,7 +36,8 @@
       "Bash(rm:*)",
       "Bash(cp:*)",
       "Bash(chmod:*)",
-      "Bash(docker:*)"
+      "Bash(docker:*)",
+      "Bash(git remote set-url:*)"
     ],
     "deny": [],
     "ask": []
