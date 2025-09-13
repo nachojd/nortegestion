@@ -19,5 +19,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # APIs modulares - MISMAS URLs que antes para el frontend
+    path('api/', include('productos.urls')),
+    path('api/', include('clientes.urls')),
+    path('api/', include('cotizaciones.urls')),
+    # Core para vistas generales y frontend
     path('', include('core.urls')),
 ]

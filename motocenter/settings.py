@@ -45,7 +45,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
-    'core',
+    # Apps modulares para SaaS
+    'productos',
+    'clientes', 
+    'cotizaciones',
+    'core',  # Mantenemos core para utils y vistas principales
 ]
 
 # Whitenoise for static files
