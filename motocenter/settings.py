@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',  # ← AGREGAR ESTA LÍNEA / JWT
     'django_filters',
     'corsheaders',
     'core',
@@ -156,8 +157,23 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS settings - Solo nortegestion.com puede acceder
+if DEBUG:
+    # Desarrollo local - para que puedas trabajar
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",    # Frontend Next.js
+        "http://localhost:3001",    # Frontend alternativo  
+        "http://127.0.0.1:3000",
+        "http://192.168.1.18:3001", # Tu IP local para la netbook
+    ]
+else:
+    # Producción - Solo tu dominio real
+    CORS_ALLOWED_ORIGINS = [
+        "https://app.nortegestion.com",
+        "https://www.nortegestion.com", 
+        "https://nortegestion.com",
+    ]
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Security settings for production
@@ -169,13 +185,28 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
-# REST Framework settings
+# REST Framework settings - Sistema SaaS Multi-Tenant
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # TODO REQUIERE LOGIN
+    ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
+}
+
+# Configuración JWT para SaaS
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),     # Token válido por 8 horas
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),    # Refresh por 30 días
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 }
