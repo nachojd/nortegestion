@@ -1,4 +1,4 @@
-# Motocenter - Configuración Docker
+# NorteGestion - Configuración Docker
 
 ## Setup de Dos Stacks Independientes
 
@@ -26,7 +26,7 @@ Este proyecto está configurado para correr dos entornos Docker completamente in
 start-stable.bat
 
 # Opción 2: Manual
-docker compose -p motocenter-stable -f docker-compose.stable.yml up -d
+docker compose -p nortegestion-stable -f docker-compose.stable.yml up -d
 ```
 
 ### Levantar Stack Desarrollo
@@ -35,7 +35,7 @@ docker compose -p motocenter-stable -f docker-compose.stable.yml up -d
 start-dev.bat
 
 # Opción 2: Manual
-docker compose -p motocenter-dev -f docker-compose.dev.yml up -d
+docker compose -p nortegestion-dev -f docker-compose.dev.yml up -d
 ```
 
 ### Parar Todos los Stacks
@@ -44,8 +44,8 @@ docker compose -p motocenter-dev -f docker-compose.dev.yml up -d
 stop-all.bat
 
 # Manual
-docker compose -p motocenter-stable -f docker-compose.stable.yml down
-docker compose -p motocenter-dev -f docker-compose.dev.yml down
+docker compose -p nortegestion-stable -f docker-compose.stable.yml down
+docker compose -p nortegestion-dev -f docker-compose.dev.yml down
 ```
 
 ## Acceso desde la Netbook
@@ -57,8 +57,8 @@ http://IP_DE_TU_PC:8081
 
 ## Bases de Datos
 
-- **Estable**: motocenter_stable (Puerto 5433)
-- **Desarrollo**: motocenter_dev (Puerto 5432)
+- **Estable**: nortegestion_stable (Puerto 5433)
+- **Desarrollo**: nortegestion_dev (Puerto 5432)
 
 Cada stack tiene su propia base de datos completamente independiente.
 

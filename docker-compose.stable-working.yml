@@ -13,24 +13,24 @@ services:
     environment:
       - DEBUG=True
       - SECRET_KEY=django-insecure-stable-key
-      - DATABASE_URL=postgres://motocenter:motocenter_stable@db-stable:5432/motocenter_stable
+      - DATABASE_URL=postgres://nortegestion:nortegestion_stable@db-stable:5432/nortegestion_stable
     depends_on:
       - db-stable
     restart: unless-stopped
-    container_name: motocenter-web-stable
+    container_name: nortegestion-web-stable
 
   db-stable:
     image: postgres:15-alpine
     volumes:
       - postgres_data_stable:/var/lib/postgresql/data/
     environment:
-      POSTGRES_DB: motocenter_stable
-      POSTGRES_USER: motocenter
-      POSTGRES_PASSWORD: motocenter_stable
+      POSTGRES_DB: nortegestion_stable
+      POSTGRES_USER: nortegestion
+      POSTGRES_PASSWORD: nortegestion_stable
     ports:
       - "0.0.0.0:5433:5432"
     restart: unless-stopped
-    container_name: motocenter-db-stable
+    container_name: nortegestion-db-stable
 
   frontend-stable:
     build:
@@ -48,11 +48,11 @@ services:
     depends_on:
       - web-stable
     restart: unless-stopped
-    container_name: motocenter-frontend-stable
+    container_name: nortegestion-frontend-stable
 
 volumes:
   postgres_data_stable:
 
 networks:
   default:
-    name: motocenter-stable-network
+    name: nortegestion-stable-network

@@ -16,7 +16,7 @@
       "Bash(docker-compose:*)",
       "Bash(docker system prune:*)",
       "Bash(npm install:*)",
-      "Bash(del \"D:\\Dev\\motocenter\\frontend\\next.config.js\")",
+      "Bash(del \"D:\\Dev\\nortegestion\\frontend\\next.config.js\")",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(cmd /c:*)",

@@ -5,7 +5,7 @@ echo Backend: http://localhost:8080
 echo Frontend: http://localhost:3080
 echo Base de datos: Puerto 5433
 
-docker compose -p motocenter-stable -f docker-compose.stable.yml up -d
+docker compose -p nortegestion-stable -f docker-compose.stable.yml up -d
 
 echo.
 echo Stack estable levantado!

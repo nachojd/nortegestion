@@ -1,4 +1,4 @@
-# 🏍️ MotoCenter - Sistema de Gestión
+# 🏍️ NorteGestion - Sistema de Gestión
 
 Sistema completo de gestión para talleres de motocicletas con Django REST Framework y frontend integrado.
 
@@ -87,7 +87,7 @@ python manage.py runserver
 ```env
 DEBUG=False
 SECRET_KEY=tu-clave-super-secreta-aqui
-DB_NAME=motocenter
+DB_NAME=nortegestion
 DB_USER=tu-usuario-db
 DB_PASSWORD=tu-password-db
 DB_HOST=tu-host-db
@@ -116,8 +116,8 @@ docker-compose up --build
 
 ### Solo la app (sin nginx)
 ```bash
-docker build -t motocenter .
-docker run -p 8000:8000 motocenter
+docker build -t nortegestion .
+docker run -p 8000:8000 nortegestion
 ```
 
 ## 📊 Stack Tecnológico
@@ -166,4 +166,4 @@ Si tienes problemas:
 
 ---
 
-**MotoCenter** - Sistema profesional para talleres de motocicletas 🏍️
+**NorteGestion** - Sistema profesional para talleres de motocicletas 🏍️

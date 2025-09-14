@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
-    command: gunicorn --bind 0.0.0.0:8000 --workers 3 motocenter.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8000 --workers 3 nortegestion.wsgi:application
     volumes:
       - static_volume:/app/staticfiles
     ports:
@@ -18,9 +18,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      POSTGRES_DB: motocenter
-      POSTGRES_USER: motocenter
-      POSTGRES_PASSWORD: motocenter
+      POSTGRES_DB: nortegestion
+      POSTGRES_USER: nortegestion
+      POSTGRES_PASSWORD: nortegestion
     restart: unless-stopped
     
   nginx:

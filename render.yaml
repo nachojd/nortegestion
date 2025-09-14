@@ -1,24 +1,24 @@
 services:
   - type: web
-    name: motocenter-web
+    name: nortegestion-web
     env: python
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-    startCommand: "python manage.py migrate && gunicorn --bind 0.0.0.0:$PORT --workers 3 motocenter.wsgi:application"
+    startCommand: "python manage.py migrate && gunicorn --bind 0.0.0.0:$PORT --workers 3 nortegestion.wsgi:application"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: motocenter.settings
+        value: nortegestion.settings
       - key: DEBUG
         value: "False"
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
         fromDatabase:
-          name: motocenter-db
+          name: nortegestion-db
           property: connectionString
   
   - type: pserv
-    name: motocenter-db
+    name: nortegestion-db
     env: postgresql
     plan: free
-    databaseName: motocenter
-    user: motocenter
+    databaseName: nortegestion
+    user: nortegestion
