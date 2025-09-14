@@ -30,7 +30,8 @@
       "Bash(ping:*)",
       "Bash(git rm:*)",
       "Bash(git filter-branch:*)",
-      "Bash(git ls-tree:*)"
+      "Bash(git ls-tree:*)",
+      "Bash(git gc:*)"
     ],
     "deny": [],
     "ask": []
