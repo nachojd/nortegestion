@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 interface Quote {
   id: number;
@@ -13,7 +14,7 @@ interface Quote {
   activo: boolean;
 }
 
-export default function QuotesPage() {
+function QuotesContent() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +24,7 @@ export default function QuotesPage() {
 
   const fetchQuotes = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/quotes/');
+      const response = await apiClient.get('/api/quotes/');
       setQuotes(response.data);
       setLoading(false);
     } catch (error) {
@@ -46,7 +47,7 @@ export default function QuotesPage() {
 
   const downloadPDF = async (quoteId: number) => {
     try {
-      window.open(`http://localhost:8000/api/quotes/${quoteId}/pdf/`, '_blank');
+      window.open(`${process.env.NEXT_PUBLIC_API_URL}/api/quotes/${quoteId}/pdf/`, '_blank');
     } catch (error) {
       console.error('Error downloading PDF:', error);
     }
@@ -56,7 +57,7 @@ export default function QuotesPage() {
     const phone = prompt("Ingrese número de teléfono:", "+5491123456789");
     if (phone) {
       try {
-        const response = await axios.post(`http://localhost:8000/api/quotes/${quote.id}/whatsapp/`, {
+        const response = await apiClient.post(`/api/quotes/${quote.id}/whatsapp/`, {
           phone: phone.replace(/[^0-9]/g, '')
         });
         window.open(response.data.whatsapp_url, '_blank');
@@ -156,5 +157,13 @@ export default function QuotesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function QuotesPage() {
+  return (
+    <ProtectedRoute>
+      <QuotesContent />
+    </ProtectedRoute>
   );
 }

@@ -1,28 +1,36 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 from decimal import Decimal
 
 class Rubro(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Multi-tenant
     nombre = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return self.nombre
-    
+
     class Meta:
         verbose_name_plural = "Rubros"
+        unique_together = ['user', 'nombre']  # Unique per user
 
 class Marca(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Multi-tenant
     nombre = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return self.nombre
 
+    class Meta:
+        unique_together = ['user', 'nombre']  # Unique per user
+
 class Product(models.Model):
-    codigo = models.CharField(max_length=20, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Multi-tenant
+    codigo = models.CharField(max_length=20)
     nombre = models.CharField(max_length=200)
     rubro = models.ForeignKey(Rubro, on_delete=models.CASCADE)
     marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
@@ -45,11 +53,15 @@ class Product(models.Model):
     
     def __str__(self):
         return f"{self.codigo} - {self.nombre}"
+
+    class Meta:
+        unique_together = ['user', 'codigo']  # Unique per user
     
 
     
 
 class Cliente(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Multi-tenant
     nombre = models.CharField(max_length=100)
     email = models.EmailField(blank=True)
     telefono = models.CharField(max_length=20, blank=True)
@@ -62,7 +74,8 @@ class Cliente(models.Model):
         return self.nombre
 
 class Quote(models.Model):
-    numero = models.CharField(max_length=20, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Multi-tenant
+    numero = models.CharField(max_length=20)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
     fecha_vencimiento = models.DateField()
@@ -74,6 +87,9 @@ class Quote(models.Model):
     
     def __str__(self):
         return f"Presupuesto {self.numero} - {self.cliente.nombre}"
+
+    class Meta:
+        unique_together = ['user', 'numero']  # Unique per user
     
     def calcular_totales(self):
         total = Decimal('0')

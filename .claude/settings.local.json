@@ -31,7 +31,13 @@
       "Bash(git rm:*)",
       "Bash(git filter-branch:*)",
       "Bash(git ls-tree:*)",
-      "Bash(git gc:*)"
+      "Bash(git gc:*)",
+      "Bash(git mv:*)",
+      "Bash(set DEBUG=True)",
+      "Bash(set USE_POSTGRES=False)",
+      "Read(//d/**)",
+      "Bash(SET DEBUG=True)",
+      "Bash(SET USE_POSTGRES=False)"
     ],
     "deny": [],
     "ask": []

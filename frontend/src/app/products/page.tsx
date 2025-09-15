@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDebounce } from 'use-debounce';
 import { useProducts } from '@/hooks/useProducts';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
-export default function ProductsPage() {
+function ProductsContent() {
   const router = useRouter();
   
   // Estados de búsqueda
@@ -305,5 +306,13 @@ export default function ProductsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <ProtectedRoute>
+      <ProductsContent />
+    </ProtectedRoute>
   );
 }
