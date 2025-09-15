@@ -37,7 +37,8 @@
       "Bash(set USE_POSTGRES=False)",
       "Read(//d/**)",
       "Bash(SET DEBUG=True)",
-      "Bash(SET USE_POSTGRES=False)"
+      "Bash(SET USE_POSTGRES=False)",
+      "Bash(rg:*)"
     ],
     "deny": [],
     "ask": []
