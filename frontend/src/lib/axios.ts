@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API Base URL - FALLBACK CAMBIADO PARA PRODUCCIÓN
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://nortegestion.com:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://5.161.102.34:8000';
 
 // Debug logging
 console.log('🔧 Frontend API Configuration:');
