@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 
 interface User {
   id: number;
@@ -27,8 +27,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// API Base URL - apuntar al backend JWT
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// API Base URL - USAR DESDE apiClient
+// const API_BASE_URL removido - ahora usamos apiClient directamente
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -50,11 +50,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           // Validate token by making a test request
           try {
-            const response = await axios.get(`${API_BASE_URL}/api/products/`, {
-              headers: {
-                'Authorization': `Bearer ${parsedTokens.access}`
-              }
-            });
+            const response = await apiClient.get('/api/products/');
+            console.log('✅ TOKEN VALIDATION: Success');
 
             if (response.status === 200) {
               setTokens(parsedTokens);
@@ -81,7 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const attemptTokenRefresh = async (currentTokens: AuthTokens) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/refresh/`, {
+      console.log('🔄 TOKEN REFRESH: Enviando petición a:', '/api/auth/refresh/');
+      const response = await apiClient.post('/api/auth/refresh/', {
         refresh: currentTokens.refresh
       });
 
@@ -115,7 +113,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setIsLoading(true);
 
-      const response = await axios.post(`${API_BASE_URL}/api/auth/login/`, {
+      console.log('🔐 LOGIN: Enviando petición a:', '/api/auth/login/');
+      const response = await apiClient.post('/api/auth/login/', {
         username,
         password
       });
