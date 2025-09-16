@@ -3,6 +3,11 @@ import axios from 'axios';
 // API Base URL
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
+// Debug logging
+console.log('🔧 Frontend API Configuration:');
+console.log('  NEXT_PUBLIC_API_URL env var:', process.env.NEXT_PUBLIC_API_URL);
+console.log('  Final API_BASE_URL:', API_BASE_URL);
+
 // Create axios instance
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

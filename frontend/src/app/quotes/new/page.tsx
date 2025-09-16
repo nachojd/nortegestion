@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 
 interface Product {
   id: number;
@@ -48,8 +48,8 @@ export default function NewQuotePage() {
   const fetchData = async () => {
     try {
       const [productsRes, clientesRes] = await Promise.all([
-        axios.get('http://localhost:8000/api/products/'),
-        axios.get('http://localhost:8000/api/clientes/')
+        apiClient.get('/api/products/'),
+        apiClient.get('/api/clientes/')
       ]);
       
       setProducts(productsRes.data);
@@ -131,7 +131,7 @@ export default function NewQuotePage() {
         }))
       };
 
-      const response = await axios.post('http://localhost:8000/api/quotes/', quoteData);
+      const response = await apiClient.post('/api/quotes/', quoteData);
       
       alert('¡Presupuesto creado exitosamente!');
       window.location.href = '/quotes';
