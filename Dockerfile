@@ -1,24 +1,3 @@
-<<<<<<< HEAD
-FROM python:3.11-slim
-
-WORKDIR /app
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements and install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy project
-COPY . .
-
-# Set Django settings module
-ENV DJANGO_SETTINGS_MODULE=motocenter.settings.development
-=======
 # Multi-stage build for production
 FROM python:3.12-slim as builder
 
@@ -61,18 +40,7 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 # Copy application code
 COPY . .
->>>>>>> main
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
-<<<<<<< HEAD
-# Expose port
-EXPOSE 8000
-
-# Run gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "motocenter.wsgi:application"]
-=======
 # Change ownership to appuser
 RUN chown -R appuser:appuser /app
 
@@ -86,6 +54,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:8000/api/')" || exit 1
 
-# Run migrations and start server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
->>>>>>> main
+# Run migrations, collectstatic and start server
+CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 --workers 3 nortegestion.wsgi:application"]

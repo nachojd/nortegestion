@@ -206,8 +206,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 frontend/node_modules/
-<<<<<<< HEAD
-=======
 node_modules/
 .env.local
 .env.development.local
@@ -216,4 +214,3 @@ node_modules/
 .DS_Store
 *.tgz
 *.tar.gz
->>>>>>> main

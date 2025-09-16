@@ -24,7 +24,7 @@ services:
   backend:
     build: .
     environment:
-      - DJANGO_SETTINGS_MODULE=motocenter.settings.production
+      - DJANGO_SETTINGS_MODULE=nortegestion.settings.production
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=False
       - POSTGRES_DB=${POSTGRES_DB}
@@ -46,7 +46,7 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
-             gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 60 motocenter.wsgi:application"
+             gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 60 nortegestion.wsgi:application"
     networks:
       - norte_network
 

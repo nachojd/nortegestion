@@ -1,13 +1,4 @@
 from django.db import models
-<<<<<<< HEAD
-
-# Los modelos se movieron a sus respectivas apps modulares:
-# - Rubro, Marca, Product → productos/models.py
-# - Cliente → clientes/models.py  
-# - Quote, QuoteItem → cotizaciones/models.py
-
-# Core mantiene solo utilidades compartidas
-=======
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from decimal import Decimal
@@ -43,7 +34,7 @@ class Product(models.Model):
     nombre = models.CharField(max_length=200)
     rubro = models.ForeignKey(Rubro, on_delete=models.CASCADE)
     marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
-    
+
     # Precios
     precio_costo = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     precio_venta = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
@@ -125,7 +116,6 @@ class QuoteItem(models.Model):
         if self.producto:
             self.descripcion = self.producto.nombre
             self.precio_unitario = self.producto.precio_venta
-        
+
         super().save(*args, **kwargs)
         self.quote.calcular_totales()
->>>>>>> main
