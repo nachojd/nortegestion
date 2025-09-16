@@ -32,7 +32,7 @@ def api_info(request):
             'auth_login': '/api/auth/login/',
             'auth_refresh': '/api/auth/refresh/',
         },
-        'frontend_url': 'http://localhost:3001'
+        'frontend_url': 'http://5.161.102.34:3000'
     })
 
 urlpatterns = [

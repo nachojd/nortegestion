@@ -13,11 +13,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable is required for production")
 
-# Production hosts
+# Production hosts - SOLO HETZNER
 ALLOWED_HOSTS = [
     '5.161.102.34',  # Hetzner server IP
-    'localhost',
-    '127.0.0.1',
 ]
 
 # Add custom domain when ready
@@ -46,14 +44,12 @@ DATABASES = {
 if not DATABASES['default']['PASSWORD']:
     raise ValueError("POSTGRES_PASSWORD environment variable is required for production")
 
-# CORS settings for production
+# CORS settings for production - SOLO HETZNER
 CORS_ALLOWED_ORIGINS = [
     f"http://5.161.102.34",
     f"https://5.161.102.34",
     f"http://5.161.102.34:3000",  # Frontend container
     f"https://5.161.102.34:3000", # Frontend container HTTPS
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
 ]
 
 # Add custom domain when ready
