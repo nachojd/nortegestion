@@ -24,7 +24,7 @@ services:
   backend:
     build: .
     environment:
-      - DJANGO_SETTINGS_MODULE=nortegestion.settings.production
+      - DJANGO_SETTINGS_MODULE=motocenter.settings.production
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=False
       - POSTGRES_DB=${POSTGRES_DB}
