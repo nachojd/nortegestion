@@ -37,7 +37,8 @@
       "Bash(cp:*)",
       "Bash(chmod:*)",
       "Bash(docker:*)",
-      "Bash(git remote set-url:*)"
+      "Bash(git remote set-url:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []
