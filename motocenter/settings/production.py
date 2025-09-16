@@ -50,6 +50,8 @@ if not DATABASES['default']['PASSWORD']:
 CORS_ALLOWED_ORIGINS = [
     f"http://5.161.102.34",
     f"https://5.161.102.34",
+    f"http://5.161.102.34:3000",  # Frontend container
+    f"https://5.161.102.34:3000", # Frontend container HTTPS
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
