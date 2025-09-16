@@ -2,7 +2,6 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-<<<<<<< HEAD
 # Copy package files
 COPY package*.json ./
 
@@ -16,18 +15,4 @@ COPY . .
 EXPOSE 3000
 
 # Run development server
-=======
-# Instalar dependencias
-COPY package*.json ./
-RUN npm config set registry https://registry.npmjs.org/ && \
-    npm install --force --maxsockets 1 --verbose
-
-# Copiar código fuente
-COPY . .
-
-# Exponer puerto
-EXPOSE 3000
-
-# Comando por defecto
->>>>>>> main
 CMD ["npm", "run", "dev"]

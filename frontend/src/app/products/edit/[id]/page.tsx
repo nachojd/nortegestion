@@ -127,8 +127,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={product.precio_costo}
                     onChange={(e) => setProduct({...product, precio_costo: e.target.value})}
-                    onFocus={(e) => { e.target.select(); e.target.setSelectionRange(0, 0); }}
-                    onClick={(e) => { e.target.setSelectionRange(0, 0); }}
+                    onFocus={(e) => { (e.target as HTMLInputElement).select(); (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
+                    onClick={(e) => { (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
                     className="w-full pl-12 pr-4 py-6 text-2xl font-bold text-black bg-white border-4 border-gray-600 rounded-lg focus:ring-4 focus:ring-blue-600 focus:border-blue-600"
                   />
                 </div>
@@ -145,8 +145,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={product.precio_venta}
                     onChange={(e) => setProduct({...product, precio_venta: e.target.value})}
-                    onFocus={(e) => { e.target.select(); e.target.setSelectionRange(0, 0); }}
-                    onClick={(e) => { e.target.setSelectionRange(0, 0); }}
+                    onFocus={(e) => { (e.target as HTMLInputElement).select(); (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
+                    onClick={(e) => { (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
                     className="w-full pl-12 pr-4 py-6 text-2xl font-bold text-black bg-white border-4 border-gray-600 rounded-lg focus:ring-4 focus:ring-blue-600 focus:border-blue-600"
                   />
                 </div>
@@ -163,8 +163,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={product.precio_lista2}
                     onChange={(e) => setProduct({...product, precio_lista2: e.target.value})}
-                    onFocus={(e) => { e.target.select(); e.target.setSelectionRange(0, 0); }}
-                    onClick={(e) => { e.target.setSelectionRange(0, 0); }}
+                    onFocus={(e) => { (e.target as HTMLInputElement).select(); (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
+                    onClick={(e) => { (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
                     className="w-full pl-12 pr-4 py-6 text-2xl font-bold text-black bg-white border-4 border-gray-600 rounded-lg focus:ring-4 focus:ring-blue-600 focus:border-blue-600"
                   />
                 </div>
@@ -181,8 +181,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={product.precio_lista3}
                     onChange={(e) => setProduct({...product, precio_lista3: e.target.value})}
-                    onFocus={(e) => { e.target.select(); e.target.setSelectionRange(0, 0); }}
-                    onClick={(e) => { e.target.setSelectionRange(0, 0); }}
+                    onFocus={(e) => { (e.target as HTMLInputElement).select(); (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
+                    onClick={(e) => { (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
                     className="w-full pl-12 pr-4 py-6 text-2xl font-bold text-black bg-white border-4 border-gray-600 rounded-lg focus:ring-4 focus:ring-blue-600 focus:border-blue-600"
                   />
                 </div>
@@ -202,8 +202,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                   type="number"
                   value={product.stock_actual}
                   onChange={(e) => setProduct({...product, stock_actual: parseInt(e.target.value) || 0})}
-                  onFocus={(e) => { e.target.select(); e.target.setSelectionRange(0, 0); }}
-                  onClick={(e) => { e.target.setSelectionRange(0, 0); }}
+                  onFocus={(e) => { (e.target as HTMLInputElement).select(); (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
+                  onClick={(e) => { (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
                   className="w-full px-4 py-6 text-2xl font-bold text-black bg-white border-4 border-gray-600 rounded-lg focus:ring-4 focus:ring-blue-600 focus:border-blue-600"
                 />
               </div>
@@ -216,8 +216,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                   type="number"
                   value={product.stock_minimo}
                   onChange={(e) => setProduct({...product, stock_minimo: parseInt(e.target.value) || 0})}
-                  onFocus={(e) => { e.target.select(); e.target.setSelectionRange(0, 0); }}
-                  onClick={(e) => { e.target.setSelectionRange(0, 0); }}
+                  onFocus={(e) => { (e.target as HTMLInputElement).select(); (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
+                  onClick={(e) => { (e.target as HTMLInputElement).setSelectionRange(0, 0); }}
                   className="w-full px-4 py-6 text-2xl font-bold text-black bg-white border-4 border-gray-600 rounded-lg focus:ring-4 focus:ring-blue-600 focus:border-blue-600"
                 />
               </div>

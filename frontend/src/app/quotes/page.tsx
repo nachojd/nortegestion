@@ -1,12 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-<<<<<<< HEAD
-import axios from 'axios';
-=======
 import apiClient from '@/lib/axios';
 import ProtectedRoute from '@/components/ProtectedRoute';
->>>>>>> main
 
 interface Quote {
   id: number;
@@ -18,11 +14,7 @@ interface Quote {
   activo: boolean;
 }
 
-<<<<<<< HEAD
-export default function QuotesPage() {
-=======
 function QuotesContent() {
->>>>>>> main
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,11 +24,7 @@ function QuotesContent() {
 
   const fetchQuotes = async () => {
     try {
-<<<<<<< HEAD
-      const response = await axios.get('http://localhost:8000/api/quotes/');
-=======
       const response = await apiClient.get('/api/quotes/');
->>>>>>> main
       setQuotes(response.data);
       setLoading(false);
     } catch (error) {
@@ -59,11 +47,7 @@ function QuotesContent() {
 
   const downloadPDF = async (quoteId: number) => {
     try {
-<<<<<<< HEAD
-      window.open(`http://localhost:8000/api/quotes/${quoteId}/pdf/`, '_blank');
-=======
       window.open(`${process.env.NEXT_PUBLIC_API_URL}/api/quotes/${quoteId}/pdf/`, '_blank');
->>>>>>> main
     } catch (error) {
       console.error('Error downloading PDF:', error);
     }
@@ -73,11 +57,7 @@ function QuotesContent() {
     const phone = prompt("Ingrese número de teléfono:", "+5491123456789");
     if (phone) {
       try {
-<<<<<<< HEAD
-        const response = await axios.post(`http://localhost:8000/api/quotes/${quote.id}/whatsapp/`, {
-=======
         const response = await apiClient.post(`/api/quotes/${quote.id}/whatsapp/`, {
->>>>>>> main
           phone: phone.replace(/[^0-9]/g, '')
         });
         window.open(response.data.whatsapp_url, '_blank');
@@ -178,8 +158,6 @@ function QuotesContent() {
       )}
     </div>
   );
-<<<<<<< HEAD
-=======
 }
 
 export default function QuotesPage() {
@@ -188,5 +166,4 @@ export default function QuotesPage() {
       <QuotesContent />
     </ProtectedRoute>
   );
->>>>>>> main
 }

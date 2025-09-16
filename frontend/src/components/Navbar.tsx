@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -37,22 +38,22 @@ export default function Navbar() {
 
           {/* Navigation Links */}
           <div className="flex items-center space-x-1 sm:space-x-4">
-            <a
+            <Link
               href="/"
               className={`text-gray-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                 pathname === '/' ? 'text-blue-700 bg-blue-50' : ''
               }`}
             >
               🏠 <span className="hidden sm:inline">Inicio</span>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/products"
               className={`text-gray-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                 pathname === '/products' ? 'text-blue-700 bg-blue-50' : ''
               }`}
             >
               📦 <span className="hidden sm:inline">Productos</span>
-            </a>
+            </Link>
 
             {/* User Info & Logout */}
             <div className="flex items-center space-x-2 ml-4 pl-4 border-l border-gray-200">
