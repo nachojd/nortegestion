@@ -38,7 +38,8 @@
       "Read(//d/**)",
       "Bash(SET DEBUG=True)",
       "Bash(SET USE_POSTGRES=False)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(sqlite3:*)"
     ],
     "deny": [],
     "ask": []
