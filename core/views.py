@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.db import models
 import os
+import logging
 from .models import Rubro, Marca, Product, Cliente, Quote, QuoteItem
 from .serializers import (
     RubroSerializer, MarcaSerializer, ProductSerializer, ProductUpdateSerializer,
@@ -13,44 +14,77 @@ from .serializers import (
 )
 from .utils import create_pdf_response
 
+logger = logging.getLogger(__name__)
+
 class FrontendView(TemplateView):
     template_name = 'core/index.html'
 
 class RubroViewSet(viewsets.ModelViewSet):
-    queryset = Rubro.objects.all()
     serializer_class = RubroSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['nombre']
 
+    def get_queryset(self):
+        return Rubro.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 class MarcaViewSet(viewsets.ModelViewSet):
-    queryset = Marca.objects.all()
     serializer_class = MarcaSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['nombre']
 
+    def get_queryset(self):
+        return Marca.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.filter(activo=True)
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['rubro', 'marca', 'activo', 'rubro__nombre', 'marca__nombre']
     search_fields = ['codigo', 'nombre', 'rubro__nombre', 'marca__nombre']
     ordering_fields = ['codigo', 'nombre', 'precio_venta', 'stock_actual']
     ordering = ['codigo']
-    
+
+    def get_queryset(self):
+        # CRÍTICO: Filtrar por usuario en TODAS las operaciones
+        return Product.objects.filter(
+            user=self.request.user,
+            activo=True
+        )
+
     def get_serializer_class(self):
         if self.action in ['update', 'partial_update']:
             return ProductUpdateSerializer
         return ProductSerializer
-        
+
+    def perform_create(self, serializer):
+        # Asignar usuario automáticamente al crear
+        serializer.save(user=self.request.user)
+
     def perform_update(self, serializer):
-        # Save only the allowed fields without touching timestamps
-        serializer.save()
+        # Mantener usuario al actualizar
+        serializer.save(user=self.request.user)
+
+    def retrieve(self, request, pk=None):
+        """Override retrieve to add debugging"""
+        logger.info(f"Usuario {request.user.email} intentando acceder producto ID {pk}")
+        try:
+            product = self.get_queryset().get(pk=pk)
+            serializer = self.get_serializer(product)
+            logger.info(f"Producto {pk} encontrado para usuario {request.user.email}")
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            logger.error(f"Producto {pk} no encontrado para usuario {request.user.email}")
+            return Response({"error": "Producto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
     
     @action(detail=False, methods=['get'])
     def low_stock(self, request):
         """Productos con stock bajo"""
-        products = Product.objects.filter(
-            activo=True,
+        products = self.get_queryset().filter(
             stock_actual__lte=models.F('stock_minimo')
         )
         serializer = self.get_serializer(products, many=True)
@@ -58,17 +92,24 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class ClienteViewSet(viewsets.ModelViewSet):
-    queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['nombre', 'email', 'telefono', 'cuit']
 
+    def get_queryset(self):
+        return Cliente.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 class QuoteViewSet(viewsets.ModelViewSet):
-    queryset = Quote.objects.filter(activo=True)
     serializer_class = QuoteSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['cliente', 'fecha']
     search_fields = ['numero', 'cliente__nombre']
+
+    def get_queryset(self):
+        return Quote.objects.filter(user=self.request.user, activo=True)
     
     def get_serializer_class(self):
         if self.action == 'create':

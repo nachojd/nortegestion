@@ -13,11 +13,11 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'rubros', RubroViewSet)
-router.register(r'marcas', MarcaViewSet)
-router.register(r'products', ProductViewSet)
-router.register(r'clientes', ClienteViewSet)
-router.register(r'quotes', QuoteViewSet)
+router.register(r'rubros', RubroViewSet, basename='rubro')
+router.register(r'marcas', MarcaViewSet, basename='marca')
+router.register(r'products', ProductViewSet, basename='product')
+router.register(r'clientes', ClienteViewSet, basename='cliente')
+router.register(r'quotes', QuoteViewSet, basename='quote')
 
 def api_info(request):
     return JsonResponse({

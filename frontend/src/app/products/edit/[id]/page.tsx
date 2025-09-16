@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -33,8 +33,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
   const fetchProduct = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await axios.get(`${apiUrl}/api/products/${params.id}/`);
+      const response = await apiClient.get(`/api/products/${params.id}/`);
       setProduct(response.data);
       setLoading(false);
     } catch (error) {
@@ -49,8 +48,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     
     setSaving(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      await axios.patch(`${apiUrl}/api/products/${params.id}/`, {
+      await apiClient.patch(`/api/products/${params.id}/`, {
         precio_costo: parseFloat(product.precio_costo) || 0,
         precio_venta: parseFloat(product.precio_venta) || 0,
         precio_lista2: parseFloat(product.precio_lista2) || 0,
