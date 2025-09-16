@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 
 interface Product {
   id: number;
@@ -47,13 +47,12 @@ const fetchProducts = async (params: SearchParams): Promise<ApiResponse> => {
   if (searchRubro) urlParams.append('rubro__nombre__icontains', searchRubro);
   if (searchMarca) urlParams.append('marca__nombre__icontains', searchMarca);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-  const finalUrl = `${apiUrl}/api/products/?${urlParams.toString()}`;
-  
+  const finalUrl = `/api/products/?${urlParams.toString()}`;
+
   console.log('🔍 API Call:', finalUrl);
   console.log('📋 Search params:', { searchCode, searchName, searchRubro, searchMarca });
-  
-  const response = await axios.get<ApiResponse>(finalUrl);
+
+  const response = await apiClient.get<ApiResponse>(finalUrl);
   
   console.log('📊 API Response:', { count: response.data.count, results: response.data.results.length });
   

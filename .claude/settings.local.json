@@ -16,7 +16,11 @@
       "Bash(docker-compose:*)",
       "Bash(docker system prune:*)",
       "Bash(npm install:*)",
+<<<<<<< HEAD
       "Bash(del \"D:\\Dev\\motocenter\\frontend\\next.config.js\")",
+=======
+      "Bash(del \"D:\\Dev\\nortegestion\\frontend\\next.config.js\")",
+>>>>>>> main
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(cmd /c:*)",
@@ -30,6 +34,7 @@
       "Bash(ping:*)",
       "Bash(git rm:*)",
       "Bash(git filter-branch:*)",
+<<<<<<< HEAD
       "Bash(git checkout:*)",
       "Bash(find:*)",
       "Bash(del:*)",
@@ -39,6 +44,18 @@
       "Bash(docker:*)",
       "Bash(git remote set-url:*)",
       "Bash(git merge:*)"
+=======
+      "Bash(git ls-tree:*)",
+      "Bash(git gc:*)",
+      "Bash(git mv:*)",
+      "Bash(set DEBUG=True)",
+      "Bash(set USE_POSTGRES=False)",
+      "Read(//d/**)",
+      "Bash(SET DEBUG=True)",
+      "Bash(SET USE_POSTGRES=False)",
+      "Bash(rg:*)",
+      "Bash(sqlite3:*)"
+>>>>>>> main
     ],
     "deny": [],
     "ask": []

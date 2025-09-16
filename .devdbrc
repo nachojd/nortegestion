@@ -1,6 +1,10 @@
 [
   {
     "type": "sqlite",
+<<<<<<< HEAD
     "path": "d:\\Dev\\motocenter\\db.sqlite3"
+=======
+    "path": "d:\\Dev\\nortegestion\\db.sqlite3"
+>>>>>>> main
   }
 ]

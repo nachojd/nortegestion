@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  web-stable:
+    image: nortegestion-dev-web-dev  # Usar imagen ya construida del dev
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "0.0.0.0:8080:8000"
+    env_file: .env.stable
+    depends_on:
+      - db-stable
+    restart: unless-stopped
+    container_name: nortegestion-web-stable
+    
+  db-stable:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data_stable:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: nortegestion_stable
+      POSTGRES_USER: nortegestion
+      POSTGRES_PASSWORD: nortegestion_stable
+    ports:
+      - "0.0.0.0:5433:5432"
+    restart: unless-stopped
+    container_name: nortegestion-db-stable
+    
+  frontend-stable:
+    image: nortegestion-dev-frontend-dev  # Usar imagen ya construida del dev
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "0.0.0.0:3080:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://192.168.1.18:8080
+    depends_on:
+      - web-stable
+    restart: unless-stopped
+    container_name: nortegestion-frontend-stable
+
+volumes:
+  postgres_data_stable:
+
+networks:
+  default:
+    name: nortegestion-stable-network
