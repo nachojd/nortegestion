@@ -21,12 +21,8 @@ def generate_quote_pdf(quote):
         spaceAfter=30,
         alignment=1  # Center
     )
-    
-<<<<<<< HEAD
+
     story.append(Paragraph("NORTE GESTIÓN", title_style))
-=======
-    story.append(Paragraph("MOTOCENTER", title_style))
->>>>>>> main
     story.append(Paragraph("Presupuesto", styles['Heading1']))
     story.append(Spacer(1, 12))
     
