@@ -16,6 +16,7 @@ if not SECRET_KEY:
 # Production hosts - SOLO HETZNER
 ALLOWED_HOSTS = [
     '5.161.102.34',  # Hetzner server IP
+    '*',  # Allow all hosts for external connectivity
 ]
 
 # Add custom domain when ready
