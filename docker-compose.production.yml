@@ -47,17 +47,21 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/", "||", "exit", "1"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/')"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 60s
+      retries: 5
+      start_period: 90s
     command: >
-      sh -c "echo 'Waiting for database...' &&
-             python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             echo 'Starting Gunicorn...' &&
-             gunicorn --bind 0.0.0.0:8000 --workers 2 --timeout 60 --log-level info nortegestion.wsgi:application"
+      sh -c "echo '🔄 Starting Django application...' &&
+             echo '📊 Checking database connection...' &&
+             python manage.py check --database default &&
+             echo '📋 Running migrations...' &&
+             python manage.py migrate --noinput &&
+             echo '📁 Collecting static files...' &&
+             python manage.py collectstatic --noinput --clear &&
+             echo '🚀 Starting Gunicorn server...' &&
+             gunicorn --bind 0.0.0.0:8000 --workers 2 --timeout 120 --log-level info --access-logfile - --error-logfile - nortegestion.wsgi:application"
     networks:
       - norte_network
     # NO external port exposure - internal access only
@@ -70,7 +74,7 @@ services:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=/api
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/", "||", "exit", "1"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/", "||", "exit", "1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -98,7 +102,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health/", "||", "exit", "1"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health/", "||", "exit", "1"]
       interval: 30s
       timeout: 10s
       retries: 3
