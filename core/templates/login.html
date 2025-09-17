@@ -36,27 +36,38 @@
 async function handleLogin(event) {
     event.preventDefault();
 
+    console.log('[LOGIN] Starting login process...');
+
     const button = document.getElementById('login-button');
     const errorDiv = document.getElementById('error-message');
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+
+    console.log('[LOGIN] Username:', username);
+    console.log('[LOGIN] API URL will be:', '/api/auth/login/');
 
     button.textContent = 'Ingresando...';
     button.disabled = true;
     errorDiv.classList.add('hidden');
 
     try {
+        console.log('[LOGIN] Making request...');
+
         const response = await axios.post('/api/auth/login/', {
             username: username,
             password: password
         });
 
+        console.log('[LOGIN] Response received:', response);
+
         if (response.status === 200) {
+            console.log('[LOGIN] Login successful!');
             const { access, refresh } = response.data;
             const tokens = { access, refresh };
 
             // Store tokens
             localStorage.setItem('nortegestion_tokens', JSON.stringify(tokens));
+            console.log('[LOGIN] Tokens stored');
 
             // Create user data
             const displayName = username.includes('@') ? username.split('@')[0] : username;
@@ -68,12 +79,18 @@ async function handleLogin(event) {
             };
 
             localStorage.setItem('nortegestion_user', JSON.stringify(userData));
+            console.log('[LOGIN] User data stored');
 
             // Redirect to products
+            console.log('[LOGIN] Redirecting to products...');
             window.location.href = '/web/products/';
         }
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('[LOGIN] Login error details:', error);
+        console.error('[LOGIN] Error response:', error.response);
+        console.error('[LOGIN] Error status:', error.response?.status);
+        console.error('[LOGIN] Error data:', error.response?.data);
+
         let errorMessage = 'Error de conexión. Verifique sus credenciales.';
 
         if (error.response && error.response.data) {
@@ -81,6 +98,8 @@ async function handleLogin(event) {
                 errorMessage = error.response.data.detail;
             } else if (error.response.data.non_field_errors) {
                 errorMessage = error.response.data.non_field_errors[0];
+            } else {
+                errorMessage = `Error ${error.response.status}: ${JSON.stringify(error.response.data)}`;
             }
         }
 
