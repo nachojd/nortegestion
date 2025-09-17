@@ -15,10 +15,13 @@ if not SECRET_KEY:
 
 # Production hosts - Nginx Reverse Proxy Architecture
 ALLOWED_HOSTS = [
-    '5.161.102.34',  # Hetzner server IP (external)
-    'backend',       # Internal Docker hostname
-    'localhost',     # Internal container access
-    '127.0.0.1',     # Internal container access
+    'nortegestion.com',     # Main domain
+    'www.nortegestion.com', # WWW subdomain
+    'app.nortegestion.com', # App subdomain
+    '5.161.102.34',         # Hetzner server IP (external)
+    'backend',              # Internal Docker hostname
+    'localhost',            # Internal container access
+    '127.0.0.1',           # Internal container access
 ]
 
 # Add custom domain when ready
