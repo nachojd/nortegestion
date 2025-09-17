@@ -13,10 +13,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable is required for production")
 
-# Production hosts - SOLO HETZNER
+# Production hosts - Nginx Reverse Proxy Architecture
 ALLOWED_HOSTS = [
-    '5.161.102.34',  # Hetzner server IP
-    '*',  # Allow all hosts for external connectivity
+    '5.161.102.34',  # Hetzner server IP (external)
+    'backend',       # Internal Docker hostname
+    'localhost',     # Internal container access
+    '127.0.0.1',     # Internal container access
 ]
 
 # Add custom domain when ready
@@ -45,12 +47,10 @@ DATABASES = {
 if not DATABASES['default']['PASSWORD']:
     raise ValueError("POSTGRES_PASSWORD environment variable is required for production")
 
-# CORS settings for production - SOLO HETZNER
+# CORS settings for production - Nginx Reverse Proxy Architecture
 CORS_ALLOWED_ORIGINS = [
-    f"http://5.161.102.34",
-    f"https://5.161.102.34",
-    f"http://5.161.102.34:3000",  # Frontend container
-    f"https://5.161.102.34:3000", # Frontend container HTTPS
+    f"http://5.161.102.34",      # External HTTP access
+    f"https://5.161.102.34",     # External HTTPS access
 ]
 
 # Add custom domain when ready

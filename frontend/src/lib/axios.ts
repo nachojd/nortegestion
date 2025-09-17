@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// API Base URL - PRODUCCIÓN HETZNER
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://5.161.102.34:8000';
+// API Base URL - Nginx Reverse Proxy Architecture
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 // Debug logging
 console.log('🔧 Frontend API Configuration:');
@@ -56,7 +56,7 @@ apiClient.interceptors.response.use(
 
           try {
             // Attempt to refresh the token
-            const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh/`, {
+            const refreshResponse = await axios.post(`${API_BASE_URL}/auth/refresh/`, {
               refresh: parsedTokens.refresh
             });
 
