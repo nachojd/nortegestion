@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Norte Gestión - Motocenter{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">🏪 Norte Gestión - Motocenter</h1>
+            <div id="user-info" class="hidden">
+                <span id="username" class="mr-4"></span>
+                <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded">Salir</button>
+            </div>
+            <div id="login-link" class="hidden">
+                <a href="/web/" class="bg-green-500 px-3 py-1 rounded">Ingresar</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-8 px-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        // Global API configuration
+        const API_BASE = '/api';
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+        });
+
+        function getToken() {
+            return localStorage.getItem('nortegestion_tokens') ?
+                   JSON.parse(localStorage.getItem('nortegestion_tokens')).access : null;
+        }
+
+        function checkAuth() {
+            const token = getToken();
+            const userInfo = document.getElementById('user-info');
+            const loginLink = document.getElementById('login-link');
+
+            if (token) {
+                const userData = JSON.parse(localStorage.getItem('nortegestion_user') || '{}');
+                document.getElementById('username').textContent = userData.first_name || userData.username || 'Usuario';
+                userInfo.classList.remove('hidden');
+                loginLink.classList.add('hidden');
+            } else {
+                userInfo.classList.add('hidden');
+                loginLink.classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('nortegestion_tokens');
+            localStorage.removeItem('nortegestion_user');
+            window.location.href = '/web/';
+        }
+
+        // Axios interceptor for authentication
+        axios.interceptors.request.use(function (config) {
+            const token = getToken();
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        });
+    </script>
+</body>
+</html>

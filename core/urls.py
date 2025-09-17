@@ -11,6 +11,7 @@ from .views import (
     RubroViewSet, MarcaViewSet, ProductViewSet,
     ClienteViewSet, QuoteViewSet
 )
+from .web_views import web_home, web_login, web_products, web_status
 
 router = DefaultRouter()
 router.register(r'rubros', RubroViewSet, basename='rubro')
@@ -36,6 +37,13 @@ def api_info(request):
     })
 
 urlpatterns = [
+    # Web interface (emergency frontend)
+    path('web/', web_home, name='web_home'),
+    path('web/login/', web_login, name='web_login'),
+    path('web/products/', web_products, name='web_products'),
+    path('web/status/', web_status, name='web_status'),
+
+    # API endpoints
     path('', api_info, name='api_info'),
     path('api/', include(router.urls)),
     # Autenticación JWT

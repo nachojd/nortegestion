@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-6">
+    <h2 class="text-3xl font-bold mb-4">📦 Gestión de Productos</h2>
+
+    <!-- Search and Filters -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input type="text" id="search" placeholder="Buscar productos..."
+                   class="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+
+            <select id="rubro-filter" class="px-3 py-2 border border-gray-300 rounded">
+                <option value="">Todos los rubros</option>
+            </select>
+
+            <select id="marca-filter" class="px-3 py-2 border border-gray-300 rounded">
+                <option value="">Todas las marcas</option>
+            </select>
+        </div>
+
+        <div class="mt-4 flex justify-between items-center">
+            <button onclick="loadProducts()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                🔍 Buscar
+            </button>
+            <div id="product-count" class="text-gray-600"></div>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="text-center py-8 hidden">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <p class="mt-2">Cargando productos...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"></div>
+
+    <!-- Products Table -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="min-w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Código</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Producto</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rubro</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Marca</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Costo</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Venta</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="products-table" class="bg-white divide-y divide-gray-200">
+                <!-- Products will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div id="pagination" class="mt-6 flex justify-between items-center hidden">
+        <button id="prev-page" onclick="previousPage()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 disabled:opacity-50">
+            ← Anterior
+        </button>
+        <span id="page-info" class="text-gray-600"></span>
+        <button id="next-page" onclick="nextPage()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 disabled:opacity-50">
+            Siguiente →
+        </button>
+    </div>
+</div>
+
+<!-- Edit Product Modal -->
+<div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg w-full max-w-md p-6">
+            <h3 class="text-lg font-bold mb-4">Editar Producto</h3>
+            <form id="edit-form" onsubmit="saveProduct(event)">
+                <input type="hidden" id="edit-id">
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Código</label>
+                    <input type="text" id="edit-codigo" class="w-full px-3 py-2 border rounded" readonly>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                    <input type="text" id="edit-nombre" class="w-full px-3 py-2 border rounded" required>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Precio Costo</label>
+                        <input type="number" step="0.01" id="edit-costo" class="w-full px-3 py-2 border rounded" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Precio Venta</label>
+                        <input type="number" step="0.01" id="edit-venta" class="w-full px-3 py-2 border rounded" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Stock Actual</label>
+                        <input type="number" id="edit-stock" class="w-full px-3 py-2 border rounded" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Stock Mínimo</label>
+                        <input type="number" id="edit-minimo" class="w-full px-3 py-2 border rounded" required>
+                    </div>
+                </div>
+
+                <div class="flex justify-between">
+                    <button type="button" onclick="closeEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentPage = 1;
+let totalPages = 1;
+
+// Check authentication on page load
+document.addEventListener('DOMContentLoaded', function() {
+    if (!getToken()) {
+        window.location.href = '/web/';
+        return;
+    }
+
+    loadFilters();
+    loadProducts();
+
+    // Add search event listener
+    document.getElementById('search').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            loadProducts();
+        }
+    });
+});
+
+async function loadFilters() {
+    try {
+        // Load rubros
+        const rubrosResponse = await axios.get('/api/rubros/');
+        const rubroSelect = document.getElementById('rubro-filter');
+        rubrosResponse.data.results.forEach(rubro => {
+            rubroSelect.innerHTML += `<option value="${rubro.id}">${rubro.nombre}</option>`;
+        });
+
+        // Load marcas
+        const marcasResponse = await axios.get('/api/marcas/');
+        const marcaSelect = document.getElementById('marca-filter');
+        marcasResponse.data.results.forEach(marca => {
+            marcaSelect.innerHTML += `<option value="${marca.id}">${marca.nombre}</option>`;
+        });
+    } catch (error) {
+        console.error('Error loading filters:', error);
+    }
+}
+
+async function loadProducts() {
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+    const table = document.getElementById('products-table');
+
+    loading.classList.remove('hidden');
+    error.classList.add('hidden');
+
+    try {
+        const search = document.getElementById('search').value;
+        const rubro = document.getElementById('rubro-filter').value;
+        const marca = document.getElementById('marca-filter').value;
+
+        let url = `/api/products/?page=${currentPage}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (rubro) url += `&rubro=${rubro}`;
+        if (marca) url += `&marca=${marca}`;
+
+        const response = await axios.get(url);
+        const data = response.data;
+
+        // Update product count
+        document.getElementById('product-count').textContent = `${data.count} productos encontrados`;
+
+        // Update pagination
+        totalPages = Math.ceil(data.count / 20);
+        updatePagination();
+
+        // Update table
+        table.innerHTML = '';
+        data.results.forEach(product => {
+            table.innerHTML += `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900">${product.codigo}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">${product.nombre}</td>
+                    <td class="px-6 py-4 text-sm text-gray-500">${product.rubro?.nombre || '-'}</td>
+                    <td class="px-6 py-4 text-sm text-gray-500">${product.marca?.nombre || '-'}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">$${parseFloat(product.precio_costo).toFixed(2)}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">$${parseFloat(product.precio_venta).toFixed(2)}</td>
+                    <td class="px-6 py-4 text-sm ${product.stock_actual <= product.stock_minimo ? 'text-red-600 font-bold' : 'text-gray-900'}">
+                        ${product.stock_actual}/${product.stock_minimo}
+                    </td>
+                    <td class="px-6 py-4 text-sm">
+                        <button onclick="editProduct(${product.id})" class="text-blue-600 hover:text-blue-900">
+                            ✏️ Editar
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+    } catch (err) {
+        console.error('Error loading products:', err);
+        error.textContent = 'Error cargando productos. Verifique su conexión.';
+        error.classList.remove('hidden');
+    } finally {
+        loading.classList.add('hidden');
+    }
+}
+
+function updatePagination() {
+    const pagination = document.getElementById('pagination');
+    const pageInfo = document.getElementById('page-info');
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+
+    if (totalPages > 1) {
+        pagination.classList.remove('hidden');
+        pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+    } else {
+        pagination.classList.add('hidden');
+    }
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        loadProducts();
+    }
+}
+
+function nextPage() {
+    if (currentPage < totalPages) {
+        currentPage++;
+        loadProducts();
+    }
+}
+
+async function editProduct(id) {
+    try {
+        const response = await axios.get(`/api/products/${id}/`);
+        const product = response.data;
+
+        document.getElementById('edit-id').value = product.id;
+        document.getElementById('edit-codigo').value = product.codigo;
+        document.getElementById('edit-nombre').value = product.nombre;
+        document.getElementById('edit-costo').value = product.precio_costo;
+        document.getElementById('edit-venta').value = product.precio_venta;
+        document.getElementById('edit-stock').value = product.stock_actual;
+        document.getElementById('edit-minimo').value = product.stock_minimo;
+
+        document.getElementById('edit-modal').classList.remove('hidden');
+    } catch (error) {
+        console.error('Error loading product:', error);
+        alert('Error cargando producto');
+    }
+}
+
+async function saveProduct(event) {
+    event.preventDefault();
+
+    const id = document.getElementById('edit-id').value;
+    const data = {
+        nombre: document.getElementById('edit-nombre').value,
+        precio_costo: parseFloat(document.getElementById('edit-costo').value),
+        precio_venta: parseFloat(document.getElementById('edit-venta').value),
+        stock_actual: parseInt(document.getElementById('edit-stock').value),
+        stock_minimo: parseInt(document.getElementById('edit-minimo').value),
+    };
+
+    try {
+        await axios.patch(`/api/products/${id}/`, data);
+        closeEditModal();
+        loadProducts();
+        alert('Producto actualizado correctamente');
+    } catch (error) {
+        console.error('Error saving product:', error);
+        alert('Error guardando producto');
+    }
+}
+
+function closeEditModal() {
+    document.getElementById('edit-modal').classList.add('hidden');
+}
+</script>
+{% endblock %}

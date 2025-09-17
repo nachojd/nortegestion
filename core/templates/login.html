@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
+
+    <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"></div>
+
+    <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="mb-4">
+            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Usuario</label>
+            <input type="text" id="username" name="username" required
+                   class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                   placeholder="motocenter@nortegestion.com">
+        </div>
+
+        <div class="mb-6">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
+            <input type="password" id="password" name="password" required
+                   class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+        </div>
+
+        <button type="submit" id="login-button"
+                class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none">
+            Ingresar
+        </button>
+    </form>
+
+    <div class="mt-6 text-center text-sm text-gray-600">
+        <p><strong>Usuario Motocenter:</strong> motocenter@nortegestion.com</p>
+        <p>Acceso a inventario completo (~3000 productos)</p>
+    </div>
+</div>
+
+<script>
+async function handleLogin(event) {
+    event.preventDefault();
+
+    const button = document.getElementById('login-button');
+    const errorDiv = document.getElementById('error-message');
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    button.textContent = 'Ingresando...';
+    button.disabled = true;
+    errorDiv.classList.add('hidden');
+
+    try {
+        const response = await axios.post('/api/auth/login/', {
+            username: username,
+            password: password
+        });
+
+        if (response.status === 200) {
+            const { access, refresh } = response.data;
+            const tokens = { access, refresh };
+
+            // Store tokens
+            localStorage.setItem('nortegestion_tokens', JSON.stringify(tokens));
+
+            // Create user data
+            const displayName = username.includes('@') ? username.split('@')[0] : username;
+            const userData = {
+                id: 0,
+                username: username,
+                email: username,
+                first_name: displayName
+            };
+
+            localStorage.setItem('nortegestion_user', JSON.stringify(userData));
+
+            // Redirect to products
+            window.location.href = '/web/products/';
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        let errorMessage = 'Error de conexión. Verifique sus credenciales.';
+
+        if (error.response && error.response.data) {
+            if (error.response.data.detail) {
+                errorMessage = error.response.data.detail;
+            } else if (error.response.data.non_field_errors) {
+                errorMessage = error.response.data.non_field_errors[0];
+            }
+        }
+
+        errorDiv.textContent = errorMessage;
+        errorDiv.classList.remove('hidden');
+    } finally {
+        button.textContent = 'Ingresar';
+        button.disabled = false;
+    }
+}
+
+// Auto-fill for development
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('username').value = 'motocenter@nortegestion.com';
+    });
+}
+</script>
+{% endblock %}
