@@ -4,18 +4,22 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB:-norte_gestion_prod}
+      POSTGRES_USER: ${POSTGRES_USER:-norte_gestion}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Environment variables for init script
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./backups:/backups
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-norte_gestion} -d ${POSTGRES_DB:-norte_gestion_prod}"]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 60s
     networks:
       - norte_network
     # NO external port exposure - internal access only
@@ -28,8 +32,8 @@ services:
       - DJANGO_SETTINGS_MODULE=motocenter.settings.production
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=False
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB:-norte_gestion_prod}
+      - POSTGRES_USER=${POSTGRES_USER:-norte_gestion}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - DB_HOST=db
       - DB_PORT=5432
@@ -38,15 +42,22 @@ services:
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
-      - ./logs:/var/log
     depends_on:
       db:
         condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     command: >
-      sh -c "python manage.py migrate &&
+      sh -c "echo 'Waiting for database...' &&
+             python manage.py migrate &&
              python manage.py collectstatic --noinput &&
-             gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 60 nortegestion.wsgi:application"
+             echo 'Starting Gunicorn...' &&
+             gunicorn --bind 0.0.0.0:8000 --workers 2 --timeout 60 --log-level info nortegestion.wsgi:application"
     networks:
       - norte_network
     # NO external port exposure - internal access only
@@ -58,6 +69,12 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=/api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     networks:
       - norte_network
     # NO external port exposure - proxied through nginx
@@ -66,16 +83,26 @@ services:
     image: nginx:alpine
     ports:
       - "80:80"
-      - "443:443"
+      # HTTPS disabled for initial deployment
+      # - "443:443"
     volumes:
       - ./nginx/production.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/var/www/static:ro
       - media_volume:/var/www/media:ro
-      - ./ssl:/etc/nginx/ssl:ro
+      # SSL disabled for initial deployment
+      # - ./ssl:/etc/nginx/ssl:ro
     depends_on:
-      - backend
-      - frontend
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health/", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     networks:
       - norte_network
     # ONLY external access point
