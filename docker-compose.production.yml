@@ -53,14 +53,13 @@ services:
       retries: 5
       start_period: 90s
     command: >
-      sh -c "echo '🔄 Starting Django application...' &&
-             echo '📊 Checking database connection...' &&
+      sh -c "echo '[START] Starting Django application...' &&
+             echo '[CHECK] Checking database connection...' &&
              python manage.py check --database default &&
-             echo '📋 Running migrations...' &&
+             echo '[MIGRATE] Running migrations...' &&
              python manage.py migrate --noinput &&
-             echo '📁 Collecting static files...' &&
-             python manage.py collectstatic --noinput --clear &&
-             echo '🚀 Starting Gunicorn server...' &&
+             echo '[SKIP] Skipping collectstatic - served directly by nginx' &&
+             echo '[SERVER] Starting Gunicorn server...' &&
              gunicorn --bind 0.0.0.0:8000 --workers 2 --timeout 120 --log-level info --access-logfile - --error-logfile - nortegestion.wsgi:application"
     networks:
       - norte_network
