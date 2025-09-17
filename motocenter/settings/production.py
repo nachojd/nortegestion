@@ -52,9 +52,18 @@ if not DATABASES['default']['PASSWORD']:
 
 # CORS settings for production - Nginx Reverse Proxy Architecture
 CORS_ALLOWED_ORIGINS = [
-    f"http://5.161.102.34",      # External HTTP access
-    f"https://5.161.102.34",     # External HTTPS access
+    "http://nortegestion.com",      # Main domain HTTP
+    "https://nortegestion.com",     # Main domain HTTPS
+    "http://www.nortegestion.com",  # WWW subdomain HTTP
+    "https://www.nortegestion.com", # WWW subdomain HTTPS
+    "http://app.nortegestion.com",  # App subdomain HTTP
+    "https://app.nortegestion.com", # App subdomain HTTPS
+    "http://5.161.102.34",          # External IP HTTP access
+    "https://5.161.102.34",         # External IP HTTPS access
 ]
+
+# For development - allow all origins temporarily
+CORS_ALLOW_ALL_ORIGINS = True  # TEMPORARY for debugging
 
 # Add custom domain when ready
 if os.getenv('DOMAIN'):
